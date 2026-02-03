@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Tab } from '../types';
 import { Bell, Settings, ChevronDown, Calendar, Search } from 'lucide-react';
@@ -62,6 +63,12 @@ const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange, onToggleDatePic
             className={`px-6 py-1.5 text-sm font-semibold rounded-md transition-all ${activeTab === Tab.AI ? 'bg-primary text-white shadow-[0_0_15px_rgba(19,127,236,0.4)]' : 'text-text-secondary hover:text-white'}`}
           >
             AI使用分析
+          </button>
+          <button 
+            onClick={() => onTabChange(Tab.PRIVATE_PLATFORM)}
+            className={`px-6 py-1.5 text-sm font-semibold rounded-md transition-all ${activeTab === Tab.PRIVATE_PLATFORM ? 'bg-primary text-white shadow-[0_0_15px_rgba(19,127,236,0.4)]' : 'text-text-secondary hover:text-white'}`}
+          >
+            私有化平台分析
           </button>
         </div>
 

@@ -1,6 +1,8 @@
+
 export enum Tab {
   ANALYSIS = 'ANALYSIS',
-  AI = 'AI'
+  AI = 'AI',
+  PRIVATE_PLATFORM = 'PRIVATE_PLATFORM'
 }
 
 export interface DateRange {

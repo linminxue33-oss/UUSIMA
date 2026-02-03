@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import TabTeachingAnalysis from './components/TabTeachingAnalysis';
 import TabAIAnalysis from './components/TabAIAnalysis';
+import TabPrivatePlatform from './components/TabPrivatePlatform';
 import DatePickerOverlay from './components/DatePickerOverlay';
 import DataMappingOverlay from './components/DataMappingOverlay';
 import AIDataAnalysisOverlay from './components/AIDataAnalysisOverlay';
@@ -18,6 +20,19 @@ export default function App() {
     start: new Date(2023, 10, 1), // Nov 1 2023
     end: new Date(2023, 10, 24)   // Nov 24 2023
   });
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case Tab.ANALYSIS:
+        return <TabTeachingAnalysis />;
+      case Tab.AI:
+        return <TabAIAnalysis />;
+      case Tab.PRIVATE_PLATFORM:
+        return <TabPrivatePlatform />;
+      default:
+        return <TabTeachingAnalysis />;
+    }
+  };
 
   return (
     <div className="flex flex-col w-full h-screen bg-background-dark text-white overflow-hidden font-sans relative">
@@ -72,11 +87,7 @@ export default function App() {
 
       <main className="flex-1 p-6 overflow-hidden relative z-0">
         <div className="h-full w-full overflow-y-auto scrollbar-hide pb-10">
-          {activeTab === Tab.ANALYSIS ? (
-            <TabTeachingAnalysis />
-          ) : (
-            <TabAIAnalysis />
-          )}
+          {renderActiveTab()}
         </div>
       </main>
 
