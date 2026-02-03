@@ -56,13 +56,13 @@ const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange, onToggleDatePic
             onClick={() => onTabChange(Tab.ANALYSIS)}
             className={`px-6 py-1.5 text-sm font-semibold rounded-md transition-all ${activeTab === Tab.ANALYSIS ? 'bg-primary text-white shadow-[0_0_15px_rgba(19,127,236,0.4)]' : 'text-text-secondary hover:text-white'}`}
           >
-            教学实验分析
+            云平台分析
           </button>
           <button 
             onClick={() => onTabChange(Tab.AI)}
             className={`px-6 py-1.5 text-sm font-semibold rounded-md transition-all ${activeTab === Tab.AI ? 'bg-primary text-white shadow-[0_0_15px_rgba(19,127,236,0.4)]' : 'text-text-secondary hover:text-white'}`}
           >
-            AI使用分析
+            AI 学伴分析
           </button>
           <button 
             onClick={() => onTabChange(Tab.PRIVATE_PLATFORM)}

@@ -188,7 +188,7 @@ const TabTeachingAnalysis: React.FC = () => {
             </div>
             <div className="flex-1 flex flex-col gap-2">
               <div className="flex justify-between items-center mb-1">
-                 <p className="text-[10px] text-text-secondary">类型分布 (5:3:2)</p>
+                 <p className="text-[10px] text-text-secondary">类型分布</p>
               </div>
               <div className="flex flex-col gap-2">
                 {dataInstitutionTypes.map((type, idx) => (

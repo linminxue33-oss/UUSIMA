@@ -226,7 +226,7 @@ const TabAIAnalysis: React.FC = () => {
          <div className="grid grid-cols-3 gap-6">
             <StatBox icon={MessageSquare} title="AI 提问总数" value="2,845,920" trend="+12.5%" isUp={true} />
             <StatBox icon={MessageCircle} title="平均对话轮数" value="8.54" trend="-2.1%" isUp={false} color="text-white" />
-            <StatBox icon={Database} title="Token 消耗总量" value="45.2" unit="B" trend="+18.4%" isUp={true} />
+            <StatBox icon={Database} title="Token 消耗总量" value="14.2" unit="亿" trend="+18.4%" isUp={true} />
          </div>
 
          {/* Heatmap Map */}

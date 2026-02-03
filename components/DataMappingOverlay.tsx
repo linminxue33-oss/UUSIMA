@@ -43,7 +43,7 @@ const DataMappingOverlay: React.FC<DataMappingOverlayProps> = ({ onClose, active
             <div>
               <h2 className="text-lg font-bold text-white">可视化图表数据映射表</h2>
               <p className="text-xs text-text-secondary">
-                当前视图: <span className="text-primary font-bold">{activeTab === Tab.ANALYSIS ? '教学实验分析' : 'AI 使用分析'}</span>
+                当前视图: <span className="text-primary font-bold">{activeTab === Tab.ANALYSIS ? '云平台分析' : 'AI 学伴分析'}</span>
               </p>
             </div>
           </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Shield, Server, Cpu, HardDrive, ShieldCheck, 
@@ -9,7 +8,6 @@ import {
   AlertTriangle, Star, BarChart3, PieChart as PieChartIcon, 
   LayoutDashboard, Search
 } from 'lucide-react';
-// Added ComposedChart to the recharts import list
 import { 
   AreaChart, Area, ResponsiveContainer, BarChart, Bar, 
   XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell,
@@ -34,9 +32,14 @@ const dataNodeStatus = [
   { name: '离线', value: 1, color: '#fa6238' },
 ];
 
+// Changed W1-W6 to Month format
 const dataActivityTrend = [
-  { name: 'W1', value: 28 }, { name: 'W2', value: 32 }, { name: 'W3', value: 30 },
-  { name: 'W4', value: 35 }, { name: 'W5', value: 38 }, { name: 'W6', value: 37 },
+  { name: '7月', value: 22 }, 
+  { name: '8月', value: 18 }, 
+  { name: '9月', value: 32 },
+  { name: '10月', value: 35 }, 
+  { name: '11月', value: 38 }, 
+  { name: '12月', value: 37 },
 ];
 
 const dataActivityDist = [
@@ -100,43 +103,30 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const TabPrivatePlatform: React.FC = () => {
-  const [filterType, setFilterType] = useState('全部学校');
+  const [filterType, setFilterType] = useState('全部学校类型');
 
   return (
     <div className="w-full flex flex-col gap-6 pb-6 animate-in fade-in duration-500">
       
-      {/* 全局筛选区 */}
+      {/* 全局筛选区 - Adjusted according to requirements */}
       <div className="flex items-center justify-between bg-surface-dark border border-border-dark p-3 rounded-xl shadow-lg">
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <Calendar size={16} className="text-primary" />
-            <select className="bg-transparent text-sm font-bold text-white focus:outline-none cursor-pointer">
-              <option>本月</option>
-              <option>本学期</option>
-              <option>自定义时间</option>
-            </select>
-          </div>
-          <div className="w-px h-4 bg-border-dark"></div>
           <div className="flex items-center gap-2">
             <Flag size={16} className="text-accent-gold" />
             <select 
               className="bg-transparent text-sm font-bold text-white focus:outline-none cursor-pointer"
               onChange={(e) => setFilterType(e.target.value)}
+              value={filterType}
             >
-              <option>全部学校类型</option>
-              <option>本科院校</option>
-              <option>高职院校</option>
-              <option>中职院校</option>
+              <option value="全部学校类型">全部学校类型</option>
+              <option value="本科院校">本科</option>
+              <option value="高职院校">高职</option>
+              <option value="中职院校">中职</option>
             </select>
           </div>
           <div className="w-px h-4 bg-border-dark"></div>
-          <div className="flex items-center gap-2">
-            <Zap size={16} className="text-accent-green" />
-            <select className="bg-transparent text-sm font-bold text-white focus:outline-none cursor-pointer">
-              <option>全部部署状态</option>
-              <option>新部署</option>
-              <option>稳定运行</option>
-            </select>
+          <div className="flex items-center gap-2 px-2">
+             <span className="text-xs text-text-secondary font-medium">筛选结果：<span className="text-primary font-bold">{filterType}</span></span>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -200,7 +190,7 @@ const TabPrivatePlatform: React.FC = () => {
           <div className="flex-1 flex gap-6">
             <div className="flex-1 flex flex-col gap-4">
               <div className="h-1/2 bg-black/20 rounded-lg p-2">
-                <p className="text-[10px] text-text-secondary mb-2 font-bold uppercase">活跃分布 / 数量趋势</p>
+                <p className="text-[10px] text-text-secondary mb-2 font-bold uppercase">活跃分布 / 数量趋势 (月度)</p>
                 <ResponsiveContainer width="100%" height="100%">
                    <ComposedChart data={dataActivityTrend}>
                       <XAxis dataKey="name" stroke="#233648" fontSize={10} tickLine={false} />
@@ -223,10 +213,14 @@ const TabPrivatePlatform: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
-                      {[1, 2, 3].map(i => (
+                      {[
+                        { name: '某某试点职业学院', last: '1周前' },
+                        { name: '东南经贸技术学院', last: '1月前' },
+                        { name: '西北工业联合学校', last: '1月前' }
+                      ].map((row, i) => (
                         <tr key={i} className="hover:bg-white/5">
-                          <td className="py-3 text-white">某某试点职业学院</td>
-                          <td className="py-3 text-center text-text-secondary">3天前</td>
+                          <td className="py-3 text-white">{row.name}</td>
+                          <td className="py-3 text-center text-text-secondary">{row.last}</td>
                           <td className="py-3 text-right">
                              <span className="px-2 py-0.5 bg-accent-gold/10 text-accent-gold rounded-full border border-accent-gold/20">推送课程包</span>
                           </td>
