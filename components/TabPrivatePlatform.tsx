@@ -199,7 +199,7 @@ const TabPrivatePlatform: React.FC = () => {
       </div>
 
       {/* 模块二：学校分层与对比分析 (Moved to 2nd Content Row) */}
-      <div className="bg-surface-dark border border-border-dark rounded-xl p-6 flex flex-col h-[820px] shrink-0">
+      <div className="bg-surface-dark border border-border-dark rounded-xl p-6 flex flex-col h-[850px] shrink-0">
         <div className="flex justify-between items-center mb-6">
            <h3 className="font-bold text-base flex items-center gap-2 text-white">
               <Target size={20} className="text-primary" /> 学校分层与对比分析
