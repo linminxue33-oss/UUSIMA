@@ -157,9 +157,10 @@ const TabPrivatePlatform: React.FC = () => {
               value={filterType}
             >
               <option value="全部学校类型">全部学校类型</option>
-              <option value="本科院校">本科</option>
               <option value="高职院校">高职</option>
               <option value="中职院校">中职</option>
+              <option value="本科院校">本科</option>
+              <option value="双高院校">双高</option>
             </select>
           </div>
           <div className="w-px h-4 bg-border-dark"></div>
