@@ -34,23 +34,23 @@ const dataCourseTop5 = [
   { name: '5G通信原理虚拟实验室', learners: 1100, experiments: 5200, rate: 80, growth: 10.8 },
 ];
 
-const dataRegions = [
-  { region: '广东省', schools: 145, users: 42000, avgTime: 45, totalTime: 124500 },
-  { region: '北京市', schools: 112, users: 38500, avgTime: 42, totalTime: 98200 },
-  { region: '上海市', schools: 98, users: 35200, avgTime: 40, totalTime: 89400 },
-  { region: '江苏省', schools: 85, users: 28900, avgTime: 38, totalTime: 65100 },
-  { region: '四川省', schools: 64, users: 22400, avgTime: 35, totalTime: 45300 },
-  { region: '浙江省', schools: 72, users: 21500, avgTime: 36, totalTime: 42800 },
-  { region: '山东省', schools: 68, users: 19800, avgTime: 34, totalTime: 39500 },
-  { region: '湖北省', schools: 55, users: 16400, avgTime: 32, totalTime: 31200 },
-  { region: '河南省', schools: 52, users: 15200, avgTime: 30, totalTime: 28500 },
-  { region: '陕西省', schools: 48, users: 14100, avgTime: 31, totalTime: 26400 },
+const dataRankings = [
+  { name: '深圳职业技术大学', users: 2450, onlineMin: 125, totalTime: 45200 },
+  { name: '广东轻工职业技术学院', users: 2120, onlineMin: 118, totalTime: 38500 },
+  { name: '金华职业技术学院', users: 1950, onlineMin: 110, totalTime: 32400 },
+  { name: '陕西工业职业技术学院', users: 1840, onlineMin: 105, totalTime: 28900 },
+  { name: '天津市职业大学', users: 1720, onlineMin: 98, totalTime: 25600 },
+  { name: '南京工业职业技术大学', users: 1650, onlineMin: 95, totalTime: 22400 },
+  { name: '无锡职业技术学院', users: 1580, onlineMin: 88, totalTime: 18500 },
+  { name: '重庆电子工程职业学院', users: 1420, onlineMin: 85, totalTime: 15200 },
+  { name: '北京电子科技职业学院', users: 1350, onlineMin: 72, totalTime: 12400 },
+  { name: '淄博职业学院', users: 1280, onlineMin: 65, totalTime: 9800 },
 ];
 
 const dataInstitutionTypes = [
-  { name: '本科院校', value: 50, color: '#137fec', ratio: '5' },
-  { name: '高职院校', value: 30, color: '#facc15', ratio: '3' },
-  { name: '中职院校', value: 20, color: '#0bda5b', ratio: '2' },
+  { name: '本科院校', value: 25, color: '#137fec', ratio: '3' },
+  { name: '高职院校', value: 60, color: '#facc15', ratio: '6' },
+  { name: '中职院校', value: 15, color: '#0bda5b', ratio: '1' },
 ];
 
 const dataExpDuration = [
@@ -129,19 +129,6 @@ const TabTeachingAnalysis: React.FC = () => {
               <p className="text-4xl font-bold text-white chart-glow font-sans tabular-nums leading-none">
                 {realTimeData.totalRegistered.toLocaleString()}
               </p>
-              <div className="flex gap-4 mt-6">
-                 <div>
-                   <p className="text-[9px] text-text-secondary">月环比</p>
-                   <span className="text-xs font-bold text-accent-green flex items-center"><TrendingUp size={12} className="mr-0.5"/> 5.4%</span>
-                 </div>
-                 <div className="w-16 h-8 opacity-40">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={[5, 8, 4, 10, 7, 12, 9].map(v => ({v}))}>
-                        <Area type="monotone" dataKey="v" stroke="#137fec" fill="#137fec" fillOpacity={0.4} dot={false} />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                 </div>
-              </div>
             </div>
             <div className="flex-1 border-l border-border-dark pl-6 flex flex-col justify-center gap-4">
                <div>
@@ -175,34 +162,62 @@ const TabTeachingAnalysis: React.FC = () => {
             <School size={18} className="text-accent-gold" />
             <h3 className="font-bold text-sm text-white/90 uppercase tracking-tighter">院校数量</h3>
           </div>
-          <div className="flex items-center gap-8">
-            <div className="flex flex-col">
+          
+          <div className="flex-1 grid grid-cols-10 gap-2">
+            {/* Left: Total Stats */}
+            <div className="col-span-3 flex flex-col justify-center border-r border-white/5 pr-2">
               <p className="text-[10px] text-text-secondary mb-1">当前院校数量</p>
-              <p className="text-4xl font-bold text-white chart-glow font-sans tabular-nums">
+              <p className="text-3xl font-bold text-white chart-glow font-sans tabular-nums">
                 {realTimeData.institutions}
               </p>
               <div className="flex items-center gap-1 mt-2">
                 <span className="size-1.5 rounded-full bg-accent-green animate-pulse"></span>
-                <span className="text-[9px] text-accent-green font-bold uppercase">当前在线院校：55</span>
+                <span className="text-[9px] text-accent-green font-bold uppercase">在线: 55</span>
               </div>
             </div>
-            <div className="flex-1 flex flex-col gap-2">
-              <div className="flex justify-between items-center mb-1">
-                 <p className="text-[10px] text-text-secondary">类型分布</p>
-              </div>
-              <div className="flex flex-col gap-2">
-                {dataInstitutionTypes.map((type, idx) => (
-                  <div key={idx} className="flex flex-col gap-0.5">
-                    <div className="flex justify-between text-[9px]">
-                       <span className="text-text-secondary">{type.name}</span>
-                       <span className="text-white font-mono">{type.value}%</span>
+
+            {/* Middle: Double High Stats */}
+            <div className="col-span-3 flex flex-col justify-center pl-4 border-r border-white/5">
+               <div className="flex items-center gap-1 mb-1">
+                 <p className="text-[10px] text-text-secondary">双高院校</p>
+                 <span className="px-1 py-0.5 bg-accent-gold/10 text-[8px] text-accent-gold border border-accent-gold/20 rounded font-bold leading-none">重点</span>
+               </div>
+               <p className="text-3xl font-bold text-white chart-glow font-sans tabular-nums">32</p>
+               <span className="text-[9px] text-text-secondary mt-2">占比 21.5%</span>
+            </div>
+
+            {/* Right: Pie Chart */}
+            <div className="col-span-4 flex items-center h-full relative">
+               <div className="w-20 h-20 relative shrink-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie 
+                        data={dataInstitutionTypes} 
+                        innerRadius={22} 
+                        outerRadius={38} 
+                        paddingAngle={5} 
+                        dataKey="value"
+                        stroke="none"
+                      >
+                        {dataInstitutionTypes.map((entry, index) => (
+                          <Cell key={index} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip content={<CustomTooltip />} />
+                    </PieChart>
+                  </ResponsiveContainer>
+               </div>
+               <div className="flex flex-col justify-center gap-1.5 ml-2">
+                  {dataInstitutionTypes.map((type, idx) => (
+                    <div key={idx} className="flex items-center gap-1.5">
+                       <div className="size-1.5 rounded-full shrink-0" style={{ backgroundColor: type.color }}></div>
+                       <div className="flex flex-col">
+                          <span className="text-[8px] text-text-secondary leading-none mb-0.5">{type.name}</span>
+                          <span className="text-[9px] font-bold text-white leading-none">{type.value}%</span>
+                       </div>
                     </div>
-                    <div className="w-full h-1 bg-background-dark rounded-full overflow-hidden">
-                      <div className="h-full rounded-full" style={{ width: `${type.value}%`, backgroundColor: type.color }}></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+               </div>
             </div>
           </div>
         </div>
@@ -212,11 +227,9 @@ const TabTeachingAnalysis: React.FC = () => {
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Heart size={16} className="text-accent-green animate-pulse" />
-              <h3 className="font-bold text-sm text-white/90 uppercase tracking-tighter">💚 实验使用情况</h3>
+              <h3 className="font-bold text-sm text-white/90 uppercase tracking-tighter">实验使用情况</h3>
             </div>
-            <div className="flex items-center gap-0.5 text-accent-gold">
-               {Array.from({length: 4}).map((_, i) => <Star key={i} size={10} fill="currentColor" />)}
-            </div>
+            
           </div>
           
           <div className="flex-1 flex flex-col overflow-hidden">
@@ -237,9 +250,6 @@ const TabTeachingAnalysis: React.FC = () => {
              <div className="py-2 border-b border-white/5 flex flex-col justify-center">
                 <div className="flex justify-between items-end mb-1">
                    <span className="text-[10px] text-text-secondary font-bold uppercase tracking-tight">✅ 平均实验时长</span>
-                   <div className="flex items-center gap-1 text-[10px] text-accent-green font-bold bg-accent-green/10 px-1.5 py-0.5 rounded">
-                      <TrendingUp size={12} /> 月环比: ↑ 5.4%
-                   </div>
                 </div>
                 <div className="flex items-baseline gap-2">
                    <p className="text-2xl font-black text-white chart-glow font-sans tabular-nums leading-none">1.2</p>
@@ -267,60 +277,134 @@ const TabTeachingAnalysis: React.FC = () => {
          <div className="col-span-12 bg-surface-dark border border-border-dark rounded-xl flex flex-col overflow-hidden relative group">
             <div className="p-5 border-b border-border-dark flex justify-between items-center bg-white/5 backdrop-blur-sm z-10">
                <h3 className="font-bold text-base flex items-center gap-2 text-white">
-                  <Map size={20} className="text-primary" /> 地区使用分布
+                  <Map size={20} className="text-primary" /> 全国业务分布
                </h3>
                <div className="flex items-center gap-4 text-[10px] text-text-secondary uppercase tracking-widest font-bold">
-                  <span>院校活跃度实时追踪</span>
+                  <span>分公司/区域活跃度实时追踪</span>
                </div>
             </div>
             
             <div className="flex h-full">
-               {/* Visual Map Area with Heatmap Style */}
+               {/* Visual Map Area with OSM Embed - Focused on China */}
                <div className="flex-1 relative overflow-hidden bg-[#0f1218]">
-                  <div className="absolute inset-0 bg-cover bg-no-repeat opacity-60 mix-blend-screen" 
-                       style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCu3P7wO66i2gtBSD64VqZc-ndbXP0vkHohDukIyqVunHnza2ywZ2e_FSGHwmbkFWbI8TlxEZ4xcuhLjpjNqPXqhiCNG1T22eJt0eMGCMZAOaBrBt5V-GurFgOuOPxKcDptkay3I4mF9aZ_rqiHBvlHaOUBcuiaqCFcrPindfES4ZmP8UCedvo40UPIoRwb3XiyG3Yb8gwAll2dcuIvVuuO1jrVVx6ogwOe0x1jcxhRyts1tjiPIASg9gQlIIrXIFMuhi9pOelvdN6n')" }}>
-                  </div>
+                  {/* Embedded OpenStreetMap with Dark Filters - BBox set for China Focus */}
+                  <iframe 
+                    width="100%" 
+                    height="100%" 
+                    frameBorder="0" 
+                    scrolling="no" 
+                    marginHeight={0} 
+                    marginWidth={0} 
+                    // Bounding Box roughly: 75E,18N to 135E,53N covers mainland China well
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=73,15,135,55&layer=mapnik"
+                    className="absolute inset-0 w-full h-full opacity-60 grayscale invert contrast-125 brightness-75 scale-110"
+                    style={{ pointerEvents: 'auto' }} 
+                    title="Business Map"
+                  ></iframe>
                   
-                  {/* Hotspots for Map */}
-                  <div className="absolute top-[40%] left-[60%] w-3 h-3 bg-primary rounded-full shadow-[0_0_15px_#137fec] animate-pulse"></div>
-                  <div className="absolute top-[35%] left-[55%] w-2 h-2 bg-primary/80 rounded-full shadow-[0_0_10px_#137fec] animate-pulse delay-75"></div>
-                  <div className="absolute top-[45%] left-[65%] w-2 h-2 bg-primary/80 rounded-full shadow-[0_0_10px_#137fec] animate-pulse delay-150"></div>
-                  <div className="absolute top-[38%] left-[68%] w-1.5 h-1.5 bg-primary/60 rounded-full shadow-[0_0_8px_#137fec] animate-pulse delay-300"></div>
-                  <div className="absolute top-[50%] left-[58%] w-1.5 h-1.5 bg-primary/60 rounded-full shadow-[0_0_8px_#137fec] animate-pulse delay-500"></div>
+                  {/* Map Overlay to provide a slight tint */}
+                  <div className="absolute inset-0 bg-primary/10 pointer-events-none mix-blend-overlay"></div>
+                  
+                  {/* --- Hotspots for Business Volume (Positioned via approx CSS %) --- */}
+                  
+                  {/* Beijing / North China - High Volume */}
+                  <div className="absolute top-[28%] left-[68%] flex flex-col items-center group cursor-pointer z-10">
+                    <div className="relative">
+                      <div className="size-6 bg-primary/30 rounded-full animate-ping absolute inset-0"></div>
+                      <div className="size-6 bg-primary/60 rounded-full border-2 border-white shadow-[0_0_20px_#137fec] flex items-center justify-center text-[9px] text-white font-bold relative z-10">
+                        85
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-white font-bold bg-black/50 px-1.5 rounded mt-1 opacity-80 group-hover:opacity-100 transition-opacity">北京</span>
+                  </div>
 
-                  {/* Optional Legend for Map */}
-                  <div className="absolute bottom-4 left-4 p-2 bg-black/40 backdrop-blur-md rounded border border-white/10 flex flex-col gap-1.5">
+                  {/* Shanghai / East China - Top Volume */}
+                  <div className="absolute top-[52%] left-[75%] flex flex-col items-center group cursor-pointer z-10">
+                    <div className="relative">
+                      <div className="size-8 bg-accent-gold/30 rounded-full animate-ping absolute inset-0"></div>
+                      <div className="size-8 bg-accent-gold/80 rounded-full border-2 border-white shadow-[0_0_25px_#facc15] flex items-center justify-center text-[10px] text-black font-black relative z-10">
+                        120
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-white font-bold bg-black/50 px-1.5 rounded mt-1 opacity-80 group-hover:opacity-100 transition-opacity">上海</span>
+                  </div>
+
+                  {/* Guangdong / South China - High Volume */}
+                  <div className="absolute top-[72%] left-[66%] flex flex-col items-center group cursor-pointer z-10">
+                    <div className="relative">
+                      <div className="size-7 bg-primary/30 rounded-full animate-ping absolute inset-0"></div>
+                      <div className="size-7 bg-primary/60 rounded-full border-2 border-white shadow-[0_0_20px_#137fec] flex items-center justify-center text-[9px] text-white font-bold relative z-10">
+                        95
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-white font-bold bg-black/50 px-1.5 rounded mt-1 opacity-80 group-hover:opacity-100 transition-opacity">广东</span>
+                  </div>
+
+                  {/* Chengdu / Southwest - Medium */}
+                  <div className="absolute top-[55%] left-[52%] flex flex-col items-center group cursor-pointer z-10">
+                    <div className="relative">
+                      <div className="size-4 bg-accent-green/30 rounded-full animate-pulse absolute inset-0"></div>
+                      <div className="size-4 bg-accent-green/60 rounded-full border border-white/50 shadow-[0_0_15px_#0bda5b] flex items-center justify-center text-[8px] text-white font-bold relative z-10">
+                        42
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-white font-bold bg-black/50 px-1.5 rounded mt-1 opacity-0 group-hover:opacity-100 transition-opacity">成都</span>
+                  </div>
+
+                  {/* Wuhan / Central - Medium */}
+                  <div className="absolute top-[54%] left-[66%] flex flex-col items-center group cursor-pointer z-10">
+                    <div className="relative">
+                      <div className="size-5 bg-primary/40 rounded-full animate-pulse absolute inset-0"></div>
+                      <div className="size-5 bg-primary/60 rounded-full border border-white/50 shadow-[0_0_15px_#137fec] flex items-center justify-center text-[8px] text-white font-bold relative z-10">
+                        58
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-white font-bold bg-black/50 px-1.5 rounded mt-1 opacity-0 group-hover:opacity-100 transition-opacity">武汉</span>
+                  </div>
+
+                  {/* Xi'an / Northwest - Medium */}
+                  <div className="absolute top-[45%] left-[58%] flex flex-col items-center group cursor-pointer z-10">
+                    <div className="relative">
+                      <div className="size-4 bg-primary/40 rounded-full animate-pulse absolute inset-0"></div>
+                      <div className="size-4 bg-primary/60 rounded-full border border-white/50 shadow-[0_0_15px_#137fec] flex items-center justify-center text-[8px] text-white font-bold relative z-10">
+                        35
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-white font-bold bg-black/50 px-1.5 rounded mt-1 opacity-0 group-hover:opacity-100 transition-opacity">西安</span>
+                  </div>
+
+                  {/* Legend Overlay */}
+                  <div className="absolute bottom-4 left-4 p-3 bg-surface-dark/90 backdrop-blur-md rounded border border-white/10 flex flex-col gap-2 z-20">
+                    <p className="text-[10px] text-text-secondary font-bold uppercase mb-1">业务量级</p>
                     <div className="flex items-center gap-2">
-                        <div className="size-2 rounded-full bg-primary shadow-[0_0_5px_#137fec]"></div>
-                        <span className="text-[10px] text-text-secondary">高活跃区</span>
+                        <div className="size-3 rounded-full bg-accent-gold shadow-[0_0_5px_#facc15]"></div>
+                        <span className="text-[10px] text-white">核心业务区 (100+)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="size-2 rounded-full bg-primary/40"></div>
-                        <span className="text-[10px] text-text-secondary">普通活跃</span>
+                        <div className="size-3 rounded-full bg-primary shadow-[0_0_5px_#137fec]"></div>
+                        <span className="text-[10px] text-white">重点拓展区 (50-100)</span>
+                    </div>
+                     <div className="flex items-center gap-2">
+                        <div className="size-3 rounded-full bg-accent-green shadow-[0_0_5px_#0bda5b]"></div>
+                        <span className="text-[10px] text-white">成长区域 (&lt;50)</span>
                     </div>
                   </div>
                </div>
                
-               {/* Data Table Area */}
-               <div className="w-[400px] border-l border-border-dark bg-surface-dark/50 backdrop-blur-sm flex flex-col z-10">
-                  <div className="grid grid-cols-5 gap-2 p-3 border-b border-border-dark text-[10px] text-text-secondary font-medium">
-                     <span>地区</span>
-                     <span className="text-center">学校</span>
-                     <span className="text-center">用户数</span>
-                     <span className="text-center">在线(min)</span>
-                     <span className="text-right">总时长(h)</span>
+               {/* Data Table Area - Extended width and new columns */}
+               <div className="w-[480px] border-l border-border-dark bg-surface-dark/50 backdrop-blur-sm flex flex-col z-10">
+                  <div className="grid grid-cols-6 gap-2 p-3 border-b border-border-dark text-[10px] text-text-secondary font-medium">
+                     <span className="col-span-4">院校名称</span>
+                     <span className="col-span-2 text-right">实验总时长(h)</span>
                   </div>
                   <div className="flex-1 overflow-y-auto scrollbar-hide">
-                     {dataRegions.map((row, i) => (
-                        <div key={i} className="grid grid-cols-5 gap-2 p-3 border-b border-border-dark/50 text-xs hover:bg-white/5 transition-colors">
-                           <div className="flex items-center gap-2 font-medium text-white">
-                              <span className={`size-4 rounded flex items-center justify-center text-[9px] ${i < 3 ? 'bg-primary text-white' : 'bg-border-dark text-text-secondary'}`}>{i+1}</span>
-                              {row.region}
+                     {dataRankings.map((row, i) => (
+                        <div key={i} className="grid grid-cols-6 gap-2 p-3 border-b border-border-dark/50 text-xs hover:bg-white/5 transition-colors">
+                           <div className="col-span-4 flex items-center gap-2 font-medium text-white">
+                              <span className={`size-4 shrink-0 rounded flex items-center justify-center text-[9px] ${i < 3 ? 'bg-primary text-white' : 'bg-border-dark text-text-secondary'}`}>{i+1}</span>
+                              <span className="truncate" title={row.name}>{row.name}</span>
                            </div>
-                           <div className="flex items-center justify-center text-text-secondary"><School size={10} className="mr-1"/> {row.schools}</div>
-                           <div className="flex items-center justify-center text-text-secondary"><Users size={10} className="mr-1"/> {row.users.toLocaleString()}</div>
-                           <div className="flex items-center justify-center text-text-secondary"><Clock size={10} className="mr-1"/> {row.avgTime}</div>
-                           <div className="text-right text-primary font-mono">{row.totalTime.toLocaleString()}</div>
+                           <div className="col-span-2 text-right text-primary font-mono">{row.totalTime.toLocaleString()}</div>
                         </div>
                      ))}
                   </div>
@@ -365,7 +449,6 @@ const TabTeachingAnalysis: React.FC = () => {
                     <tr className="text-text-secondary border-b border-white/5">
                       <th className="pb-3 text-left font-medium">课程</th>
                       <th className="pb-3 text-center font-medium">学习人数</th>
-                      <th className="pb-3 text-right font-medium">月增长率</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
@@ -376,9 +459,6 @@ const TabTeachingAnalysis: React.FC = () => {
                           <span className="text-white truncate max-w-[90px]">{course.name}</span>
                         </td>
                         <td className="py-4 text-center font-mono text-text-secondary">{course.learners.toLocaleString()}</td>
-                        <td className="py-4 text-right text-accent-green font-bold flex items-center justify-end gap-1">
-                          <TrendingUp size={10} /> {course.growth}%
-                        </td>
                       </tr>
                     ))}
                   </tbody>

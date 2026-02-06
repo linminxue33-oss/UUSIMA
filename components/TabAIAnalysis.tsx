@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageSquare, MessageCircle, Database, TrendingUp, TrendingDown, Zap, Users, Trophy, Flame, Search, Sparkles } from 'lucide-react';
+import { MessageSquare, MessageCircle, Database, TrendingUp, TrendingDown, Zap, Users, Trophy, Flame, Search, Sparkles, MapPin, Activity, Bot } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell } from 'recharts';
 
 // --- Mock Data ---
@@ -33,16 +33,30 @@ const dataSchoolTop10 = [
 ];
 
 const dataWordFrequency = [
-  { keyword: 'Python 实验', count: 12450, growth: '+15%', hot: true },
-  { keyword: '传感器配置', count: 9820, growth: '+8%', hot: true },
-  { keyword: '深度学习模型', count: 8540, growth: '+22%', hot: true },
-  { keyword: '数据清洗', count: 7210, growth: '+5%', hot: false },
-  { keyword: '工业网关', count: 6100, growth: '+12%', hot: false },
-  { keyword: '嵌入式调试', count: 5430, growth: '-2%', hot: false },
-  { keyword: '5G基站实训', count: 4280, growth: '+30%', hot: true },
-  { keyword: 'OpenCV应用', count: 3950, growth: '+10%', hot: false },
-  { keyword: '算法优化', count: 3100, growth: '+4%', hot: false },
-  { keyword: 'PLC 编程', count: 2850, growth: '+7%', hot: false },
+  { keyword: 'RS485', count: 39, growth: '+12%', hot: true, assistant: '串口服务器智能体' },
+  { keyword: 'Node-RED', count: 39, growth: '+10%', hot: true, assistant: '智慧园区-虚实结合' },
+  { keyword: '电源 (Power)', count: 38, growth: '+8%', hot: true, assistant: '虚拟仿真实验助手' },
+  { keyword: '红外 (Infrared)', count: 37, growth: '+15%', hot: true, assistant: '智慧园区-虚实结合' },
+  { keyword: '温湿度 (T&H)', count: 36, growth: '+5%', hot: false, assistant: '智慧园区-虚实结合' },
+  { keyword: '12V 电源', count: 35, growth: '+4%', hot: false, assistant: '虚拟仿真实验助手' },
+  { keyword: '24V 电源', count: 35, growth: '+3%', hot: false, assistant: '虚拟仿真实验助手' },
+  { keyword: 'NB-200', count: 35, growth: '+7%', hot: false, assistant: '串口服务器智能体' },
+  { keyword: '串口 (Serial)', count: 33, growth: '-2%', hot: false, assistant: '串口服务器智能体' },
+  { keyword: '传感器 (Sensor)', count: 22, growth: '+6%', hot: false, assistant: '智慧园区-虚实结合' },
+];
+
+// New data for the list view replacement of the heatmap
+const dataRegionalActivity = [
+  { id: 1, region: '华东区', city: '上海', school: '上海电子信息职业技术学院', activeIndex: 92, status: '高热' },
+  { id: 2, region: '华南区', city: '深圳', school: '深圳职业技术大学', activeIndex: 88, status: '高热' },
+  { id: 3, region: '华北区', city: '北京', school: '北京电子科技职业学院', activeIndex: 85, status: '高热' },
+  { id: 4, region: '华南区', city: '广州', school: '广东轻工职业技术学院', activeIndex: 82, status: '高热' },
+  { id: 5, region: '华东区', city: '南京', school: '南京工业职业技术大学', activeIndex: 78, status: '中热' },
+  { id: 6, region: '华中区', city: '武汉', school: '武汉职业技术学院', activeIndex: 75, status: '中热' },
+  { id: 7, region: '西南区', city: '成都', school: '成都航空职业技术学院', activeIndex: 72, status: '中热' },
+  { id: 8, region: '西北区', city: '西安', school: '陕西工业职业技术学院', activeIndex: 68, status: '中热' },
+  { id: 9, region: '华北区', city: '天津', school: '天津市职业大学', activeIndex: 65, status: '低热' },
+  { id: 10, region: '华东区', city: '杭州', school: '浙江机电职业技术学院', activeIndex: 62, status: '低热' },
 ];
 
 // --- Components ---
@@ -229,80 +243,49 @@ const TabAIAnalysis: React.FC = () => {
             <StatBox icon={Database} title="Token 消耗总量" value="14.2" unit="亿" trend="+18.4%" isUp={true} />
          </div>
 
-         {/* Heatmap Map */}
-         <div className="border border-primary/20 flex-1 rounded-lg relative overflow-hidden bg-white/5 shadow-[0_0_20px_rgba(19,127,236,0.1)] min-h-[400px]">
-            <div className="absolute top-6 left-6 z-10 pointer-events-none">
-               <div className="flex items-center gap-2 mb-1">
-                  <div className="w-1 h-4 bg-primary rounded-full"></div>
-                  <h3 className="text-lg font-bold text-white/90 uppercase tracking-tighter">机构 AI 使用热力分布</h3>
-               </div>
-               <p className="text-xs text-text-secondary">实时监测各院校实验室 AI 交互活跃度</p>
-            </div>
-
-            <div className="w-full h-full bg-cover bg-no-repeat opacity-40 mix-blend-screen" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCu3P7wO66i2gtBSD64VqZc-ndbXP0vkHohDukIyqVunHnza2ywZ2e_FSGHwmbkFWbI8TlxEZ4xcuhLjpjNqPXqhiCNG1T22eJt0eMGCMZAOaBrBt5V-GurFgOuOPxKcDptkay3I4mF9aZ_rqiHBvlHaOUBcuiaqCFcrPindfES4ZmP8UCedvo40UPIoRwb3XiyG3Yb8gwAll2dcuIvVuuO1jrVVx6ogwOe0x1jcxhRyts1tjiPIASg9gQlIIrXIFMuhi9pOelvdN6n')" }}></div>
-            
-            {/* Hotspots */}
-            <div className="absolute top-1/3 left-1/4 w-3 h-3 bg-primary rounded-full shadow-[0_0_15px_#137fec] animate-pulse"></div>
-            <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-primary rounded-full shadow-[0_0_15px_#137fec] animate-pulse delay-75"></div>
-            <div className="absolute top-1/4 right-1/3 w-3 h-3 bg-primary rounded-full shadow-[0_0_15px_#137fec] animate-pulse delay-150"></div>
-            <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-primary rounded-full shadow-[0_0_15px_#137fec] animate-pulse delay-300"></div>
-
-            <div className="absolute bottom-6 left-6 p-4 bg-black/40 backdrop-blur-md rounded border border-white/10 flex flex-col gap-2">
-               <div className="flex items-center gap-3">
-                  <div className="size-3 rounded-sm bg-primary/20 border border-primary"></div>
-                  <span className="text-xs text-text-secondary">活跃度：低</span>
-               </div>
-               <div className="flex items-center gap-3">
-                  <div className="size-3 rounded-sm bg-primary/60 border border-primary"></div>
-                  <span className="text-xs text-text-secondary">活跃度：中</span>
-               </div>
-               <div className="flex items-center gap-3">
-                  <div className="size-3 rounded-sm bg-primary border border-primary shadow-[0_0_8px_#137fec]"></div>
-                  <span className="text-xs text-text-secondary">活跃度：高</span>
-               </div>
-            </div>
-            
-            <div className="absolute top-6 right-6 text-right">
-               <p className="text-[10px] text-text-secondary uppercase tracking-widest">Active Institutions</p>
-               <p className="text-2xl font-bold font-sans">128 <span className="text-sm text-primary">/ 142</span></p>
-            </div>
-         </div>
-      </div>
-
-      {/* Right Column */}
-      <div className="col-span-3 flex flex-col gap-6">
-         {/* Word Frequency Analysis */}
-         <div className="bg-gradient-to-br from-surface-dark/90 to-background-dark border border-primary/20 p-5 rounded-lg flex flex-col relative overflow-hidden shadow-[inset_0_0_20px_rgba(19,127,236,0.05)]">
+         {/* Technical Hotspot Analysis (Moved to Middle) */}
+         <div className="bg-gradient-to-br from-surface-dark/90 to-background-dark border border-primary/20 p-5 rounded-lg flex flex-col flex-1 relative overflow-hidden shadow-[inset_0_0_20px_rgba(19,127,236,0.05)]">
             <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-primary"></div>
             <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-primary"></div>
 
             <div className="flex items-center justify-between mb-4">
                <div className="flex items-center gap-2">
                   <Search size={16} className="text-primary" />
-                  <h3 className="text-sm font-bold text-white/90 uppercase tracking-tighter">用户提问热词分析</h3>
+                  <h3 className="text-sm font-bold text-white/90 uppercase tracking-tighter">技术热点分析</h3>
                </div>
                <div className="flex items-center gap-1 text-[9px] text-text-secondary">
                   <Flame size={10} className="text-accent-red" /> 实时热度
                </div>
             </div>
+
+            <div className="flex justify-between px-1 mb-2 text-[9px] text-text-secondary font-bold border-b border-white/5 pb-1">
+              <span>技术热点 / 关联 AI 助手</span>
+              <span>互动提及</span>
+            </div>
             
             <div className="flex-1 overflow-y-auto scrollbar-hide flex flex-col gap-3">
                {dataWordFrequency.map((item, idx) => (
                   <div key={idx} className="flex flex-col gap-1 group">
-                     <div className="flex justify-between items-center px-1">
-                        <div className="flex items-center gap-2">
-                           <span className={`text-[10px] font-bold italic ${idx < 3 ? 'text-accent-gold' : 'text-text-secondary/50'}`}>#{idx + 1}</span>
-                           <span className="text-[11px] text-white/90 font-medium group-hover:text-primary transition-colors flex items-center gap-1">
-                              {item.keyword}
-                              {item.hot && <Flame size={10} className="text-accent-red fill-accent-red animate-pulse" />}
-                           </span>
+                     <div className="flex justify-between items-start px-1">
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2">
+                              <span className={`text-[10px] font-bold italic ${idx < 3 ? 'text-accent-gold' : 'text-text-secondary/50'}`}>#{idx + 1}</span>
+                              <span className="text-[11px] text-white/90 font-medium group-hover:text-primary transition-colors flex items-center gap-1">
+                                 {item.keyword}
+                                 {item.hot && <Flame size={10} className="text-accent-red fill-accent-red animate-pulse" />}
+                              </span>
+                           </div>
+                           <div className="pl-5">
+                              <span className="text-[8px] px-1.5 py-0.5 rounded bg-white/5 text-text-secondary/80 border border-white/10 flex items-center gap-1 w-fit group-hover:border-primary/30 group-hover:text-primary/80 transition-colors">
+                                 <Bot size={8} /> {item.assistant}
+                              </span>
+                           </div>
                         </div>
                         <div className="flex flex-col items-end">
                            <span className="text-[10px] font-mono text-white/60">{item.count.toLocaleString()}</span>
-                           <span className={`text-[8px] font-bold ${item.growth.startsWith('+') ? 'text-accent-green' : 'text-accent-red'}`}>{item.growth}</span>
                         </div>
                      </div>
-                     <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                     <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mt-1">
                         <div 
                            className={`h-full rounded-full transition-all duration-1000 ${idx < 3 ? 'bg-primary' : 'bg-primary/30'}`} 
                            style={{ width: `${(item.count / dataWordFrequency[0].count) * 100}%` }}
@@ -313,9 +296,71 @@ const TabAIAnalysis: React.FC = () => {
             </div>
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between bg-white/5 p-2 rounded">
                <div className="flex items-center gap-1.5 text-[10px] text-text-secondary">
-                  <Sparkles size={12} className="text-primary" /> AI 语义分类
+                  <Sparkles size={12} className="text-primary" /> AI 运营闭环已激活
                </div>
                <button className="text-[10px] text-primary hover:underline">查看全表</button>
+            </div>
+         </div>
+      </div>
+
+      {/* Right Column */}
+      <div className="col-span-3 flex flex-col gap-6">
+         {/* Institution AI Activity Distribution (Renamed) */}
+         <div className="border border-primary/20 h-[340px] rounded-lg relative overflow-hidden bg-surface-dark/50 backdrop-blur-sm shadow-[inset_0_0_20px_rgba(19,127,236,0.05)] flex flex-col p-5">
+            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-primary"></div>
+            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-primary"></div>
+
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+               <div className="flex items-center gap-2">
+                  <div className="w-1 h-4 bg-primary rounded-full"></div>
+                  <h3 className="text-sm font-bold text-white/90 uppercase tracking-tighter">院校 AI 活跃</h3>
+               </div>
+               <div className="flex items-center gap-1 text-[8px] text-text-secondary font-medium">
+                  <div className="flex items-center gap-0.5"><div className="size-1.5 rounded-full bg-primary"></div>高</div>
+                  <div className="flex items-center gap-0.5"><div className="size-1.5 rounded-full bg-accent-gold"></div>中</div>
+               </div>
+            </div>
+
+            {/* List Content */}
+            <div className="flex-1 overflow-y-auto scrollbar-hide">
+               <table className="w-full text-left border-collapse">
+                  <thead>
+                     <tr className="text-[10px] text-text-secondary border-b border-white/5 uppercase tracking-wider">
+                        <th className="py-2 pl-1 font-medium">城市</th>
+                        <th className="py-2 font-medium">院校名称</th>
+                        <th className="py-2 text-right font-medium">指数</th>
+                        <th className="py-2 text-right pr-1 font-medium">状态</th>
+                     </tr>
+                  </thead>
+                  <tbody className="text-xs">
+                     {dataRegionalActivity.map((item, idx) => (
+                        <tr key={idx} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                           <td className="py-2 pl-1">
+                              <div className="flex flex-col">
+                                 <div className="flex items-center gap-1.5 text-white font-bold">
+                                    <MapPin size={10} className="text-primary" />
+                                    {item.city}
+                                 </div>
+                              </div>
+                           </td>
+                           <td className="py-2 text-text-secondary group-hover:text-primary transition-colors font-medium max-w-[110px] truncate" title={item.school}>{item.school}</td>
+                           <td className="py-2 text-right font-mono font-bold text-white">
+                              {item.activeIndex}
+                           </td>
+                           <td className="py-2 text-right pr-1">
+                              <span className={`inline-flex items-center justify-center px-1.5 py-0.5 rounded text-[8px] font-bold border min-w-[32px] ${
+                                 item.status === '高热' ? 'bg-primary/20 text-primary border-primary/30' :
+                                 item.status === '中热' ? 'bg-accent-gold/10 text-accent-gold border-accent-gold/20' :
+                                 'bg-white/5 text-text-secondary border-white/10'
+                              }`}>
+                                 {item.status}
+                              </span>
+                           </td>
+                        </tr>
+                     ))}
+                  </tbody>
+               </table>
             </div>
          </div>
 
@@ -326,10 +371,10 @@ const TabAIAnalysis: React.FC = () => {
 
             <div className="flex items-center gap-2 mb-2">
                <div className="w-1 h-4 bg-primary rounded-full"></div>
-               <h3 className="text-sm font-bold text-white/90 uppercase tracking-tighter">垂类助手活跃度</h3>
+               <h3 className="text-sm font-bold text-white/90 uppercase tracking-tighter">技能助手活跃度</h3>
             </div>
             
-            <div className="flex-1 w-full min-h-[160px]">
+            <div className="flex-1 w-full min-h-[140px]">
                <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={dataSkillAssistants} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
                      <CartesianGrid strokeDasharray="3 3" stroke="#233648" horizontal={false} />
@@ -343,27 +388,7 @@ const TabAIAnalysis: React.FC = () => {
                </ResponsiveContainer>
             </div>
          </div>
-
-         {/* TOP 5 Ranking (Simplified) */}
-         <div className="bg-gradient-to-br from-surface-dark/90 to-background-dark border border-primary/20 p-5 rounded-lg relative overflow-hidden h-[180px]">
-            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-primary"></div>
-            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-primary"></div>
-            <div className="flex items-center gap-2 mb-3">
-               <Trophy size={16} className="text-accent-gold" />
-               <h3 className="text-sm font-bold text-white/90 uppercase tracking-tighter">全平台活跃院校</h3>
-            </div>
-            <div className="flex flex-col gap-2">
-               {dataSchoolTop10.slice(0, 5).map((school, index) => (
-                  <div key={index} className="flex justify-between items-center text-[11px]">
-                     <span className="text-text-secondary truncate max-w-[150px]">
-                        <span className={`inline-block w-4 text-center mr-1 ${index < 3 ? 'text-accent-gold font-bold' : 'text-text-secondary/50'}`}>{index + 1}</span>
-                        {school.name}
-                     </span>
-                     <span className="font-mono text-primary/80 font-bold">{(school.value / 1000).toFixed(1)}k</span>
-                  </div>
-               ))}
-            </div>
-         </div>
+         
       </div>
     </div>
   );
